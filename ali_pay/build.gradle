@@ -20,5 +20,5 @@ android {
 }
 
 dependencies {
-    compile files('libs/alipaySdk-20170922.jar')
+    compile files('libs/alipaySdk-20170922.jar')//支付宝JAR包
 }
