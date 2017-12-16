@@ -27,17 +27,6 @@ public class JPUSHTools {
     private static final String JPUSH_APP_KEY = "JPUSH_APPKEY";
 
     /**
-     * 方法描述: 验证传入的参数是否是标签和别名    校验Tag(标签) Alias(别名) 只能是数字,英文字母和中文
-     *
-     * @param s 此处传入的是标签和别名
-     */
-    public static boolean isValidTagAndAlias(String s) {
-        Pattern pattern = Pattern.compile("^[\u4E00-\u9FA50-9a-zA-Z_!@#$&*+=.|]+$");
-        Matcher matcher = pattern.matcher(s);
-        return matcher.matches();
-    }
-
-    /**
      * 方法描述: 获取在清单文件中填入的极光推送服务的AppKey
      */
     public static String getJPUSHAppKey(Context context) {
@@ -60,16 +49,30 @@ public class JPUSHTools {
     }
 
     /**
-     * 方法描述: 取得本APP的版本号
+     * 方法描述: 获取极光推送SDK 向 极光推送服务器 注册所得到的 注册 全局唯一的 ID
      */
-    public static String getVersion(Context context) {
-        try {
-            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.versionName;
-        } catch (NameNotFoundException e) {
-            Log.e("JPUSHTools---GetVersion", e.getMessage());
-            return "Unknown";
-        }
+    public static String getRegistrationID(Context context) {
+        // 因为RegistrationID需要通过广播获取，所以需要一定时间，getRegistrationID方法的调用要有延时
+        String registrationID = JPushInterface.getRegistrationID(context);
+        return TextUtils.isEmpty(registrationID) ? "" : registrationID;
+    }
+
+    /**
+     * 方法描述: 通过极光推送的SDK来获取设备唯一ID？？？TODO 有待考证
+     */
+    public static String getDeviceId(Context context) {
+        return JPushInterface.getUdid(context);
+    }
+
+    /**
+     * 方法描述: 验证传入的参数是否是标签和别名    校验Tag(标签) Alias(别名) 只能是数字,英文字母和中文
+     *
+     * @param s 此处传入的是标签和别名
+     */
+    public static boolean isValidTagAndAlias(String s) {
+        Pattern pattern = Pattern.compile("^[\u4E00-\u9FA50-9a-zA-Z_!@#$&*+=.|]+$");
+        Matcher matcher = pattern.matcher(s);
+        return matcher.matches();
     }
 
     /**
@@ -95,23 +98,6 @@ public class JPUSHTools {
         return (networkInfo != null && networkInfo.isConnected());
     }
 
-    /**
-     * 方法描述: 获取IMEI
-     */
-    public static String getImei(Context context, String imei) {
-        String ret = null;
-        try {
-            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            ret = telephonyManager.getDeviceId();
-        } catch (Exception e) {
-            Log.e(JPUSHTools.class.getSimpleName(), e.getMessage());
-        }
-        if (isReadableASCII(ret)) {
-            return ret;
-        } else {
-            return imei;
-        }
-    }
 
     private static boolean isReadableASCII(CharSequence string) {
         if (TextUtils.isEmpty(string)) return false;
@@ -121,9 +107,5 @@ public class JPUSHTools {
         } catch (Throwable e) {
             return true;
         }
-    }
-
-    public static String getDeviceId(Context context) {
-        return JPushInterface.getUdid(context);
     }
 }
