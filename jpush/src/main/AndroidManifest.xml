@@ -4,6 +4,16 @@
     <!--
 
             TODO        res文件夹下的所有 jpush_ 开头的资源文件可以换颜色和图片内容，但是不能修改所有的文件名，和布局文件中的组件 id。
+            使用步骤
+                1、替换清单包名
+                2、替换AppKey
+                3、在主Module中的自定义的Application的onCreate方法中写入如下代码，初始化并开启极光推送:
+                            // 极光推送初始化
+                            JPUSHLogTools.LOG_ENABLE = true;      // 设置是否开启极光推送自定义日志打印
+                            JPushInterface.setDebugMode(true);    // 设置开启日志,发布时请关闭日志
+                            JPushInterface.init(this);            // 初始化 JPush
+                4、
+
 
     -->
 
@@ -48,11 +58,16 @@
             android:enabled="true"
             android:exported="false"><!-- TODO 极光推送自定义广播内容 -->
             <intent-filter>
-                <action android:name="cn.jpush.android.intent.REGISTRATION" /> <!--Required  用户注册SDK的intent-->
-                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" /> <!--Required  用户接收SDK消息的intent-->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" /> <!--Required  用户接收SDK通知栏信息的intent-->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" /> <!--Required  用户打开自定义通知栏的intent-->
-                <action android:name="cn.jpush.android.intent.CONNECTION" /><!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <!--Required  用户注册SDK获取Registration ID的intent-->
+                <action android:name="cn.jpush.android.intent.REGISTRATION" />
+                <!--Required  用户接收SDK自定义消息的intent-->
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
+                <!--Required  用户接收SDK通知栏信息的intent-->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
+                <!--Required  用户点击通知栏时，自定义使用的Intent跳转(如果开发者未配置此 receiver action，那么，SDK 会默认打开应用程序的主 Activity，相当于用户点击桌面图标的效果。)-->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
+                <!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <action android:name="cn.jpush.android.intent.CONNECTION" />
                 <category android:name="com.zhq.multi_module" /><!-- TODO 这里要替换下包名 -->
             </intent-filter>
         </receiver>
