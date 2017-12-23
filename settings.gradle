@@ -1,1 +1,1 @@
-include ':app', ':ali_pay', ':jpush'
+include ':app', ':ali_pay', ':jpush', ':baselibrary'

@@ -41,7 +41,7 @@ public class MyReceiver extends BroadcastReceiver {
 
                 JPUSHLogTools.d(TAG, "JPush接收到推送下来的自定义消息 :" + " 标题 --- " + messageTitle + "； 内容 --- " + messageContent + "； 附加字段 --- " + messageAdditionalFields + "； 消息ID --- " + messageID);
 
-                // TODO 将自定义消息的通过广播发送给我们自定义的广播接收者
+                // TODO 将自定义消息的的内容发送出去，可以用自定义广播接收，也可以。。。。。。
                 transmitCustomMessage(context, bundle);
             } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {// --------------------接收 通知(通知栏信息)
                 // 如果通知的内容为空，则在通知栏上不会展示通知。
