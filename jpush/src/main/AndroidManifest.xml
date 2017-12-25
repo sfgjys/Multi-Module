@@ -11,7 +11,7 @@
                             // 极光推送初始化
                             JPUSHLogTools.LOG_ENABLE = true;      // 设置是否开启极光推送自定义日志打印
                             JPushInterface.setDebugMode(true);    // 设置开启日志,发布时请关闭日志
-                            JPushInterface.init(this);            // 初始化 JPush
+                            JPushInterface.init(this);            // 初始化 JPush  参数为应用的 ApplicationContext
                 4、
 
 

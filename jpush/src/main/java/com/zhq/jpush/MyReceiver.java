@@ -5,7 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.zhq.baselibrary.jxl.OperationExcel;
 import com.zhq.jpush.tool.JPUSHLogTools;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -20,7 +24,7 @@ public class MyReceiver extends BroadcastReceiver {
     private static final String TAG = "MyReceiver";
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(final Context context, Intent intent) {
         try {
             Bundle bundle = intent.getExtras();
 
