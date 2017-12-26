@@ -1,4 +1,4 @@
-package com.zhq.jpush;
+package com.zhq.jpush.bean;
 
 import java.util.Date;
 
