@@ -1,8 +1,8 @@
 package com.zhq.baselibrary.jxl;
 
-import android.content.Context;
-import android.content.res.AssetManager;
 import android.util.Log;
+
+import java.io.InputStream;
 
 import jxl.Sheet;
 import jxl.Workbook;
@@ -13,13 +13,12 @@ public class OperationExcel {
     /**
      * 获取 excel 表格中的数据,不能在主线程中调用
      *
-     * @param excelName excel 表格的名称
-     * @param index     第几张表格中的数据
+     * @param index 第几张表格中的数据
      */
-    public static void getExcelData(AssetManager assetManager, String excelName, int index) {
+    public static void getExcelData(InputStream inputStream, int index) {
         try {
             // 获取Excel的工作空间
-            Workbook workbook = Workbook.getWorkbook(assetManager.open(excelName));
+            Workbook workbook = Workbook.getWorkbook(inputStream);
             // 获取Excel的工作空间中的第index表格
             Sheet sheet = workbook.getSheet(index);
 
@@ -40,6 +39,4 @@ public class OperationExcel {
             Log.e(TAG, "read error=" + e, e);
         }
     }
-
-
 }
