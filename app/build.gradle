@@ -28,6 +28,4 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.+'// V7包
     compile 'com.android.support.constraint:constraint-layout:1.0.2'// 约束布局
     testCompile 'junit:junit:4.12'// java单元测试
-
-    compile project(':jpush')// 极光推送模块
 }
