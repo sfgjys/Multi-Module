@@ -5,11 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.zhq.baselibrary.jxl.OperationExcel;
 import com.zhq.jpush.tool.JPUSHLogTools;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 import cn.jpush.android.api.JPushInterface;
 
