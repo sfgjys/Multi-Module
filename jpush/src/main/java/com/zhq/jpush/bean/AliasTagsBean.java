@@ -23,6 +23,16 @@ public class AliasTagsBean {
     private String mAliasData;
     private boolean mIsAliasAction;// 是否是别名操作动作
 
+    public AliasTagsBean(int mWhichAction, Set<String> mTagsData, String mAliasData, boolean mIsAliasAction) {
+        this.mWhichAction = mWhichAction;
+        this.mTagsData = mTagsData;
+        this.mAliasData = mAliasData;
+        this.mIsAliasAction = mIsAliasAction;
+    }
+
+    public AliasTagsBean() {
+    }
+
     public int getWhichAction() {
         return mWhichAction;
     }
