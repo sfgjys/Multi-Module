@@ -1,28 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zhq.jpush">
 
-    <!--
-
-            TODO        res文件夹下的所有 jpush_ 开头的资源文件可以换颜色和图片内容，但是不能修改所有的文件名，和布局文件中的组件 id。
-            使用步骤
-                1、替换清单包名
-                2、替换AppKey
-                3、在主Module中的自定义的Application的onCreate方法中写入如下代码，初始化并开启极光推送:
-                            // 极光推送初始化
-                            JPUSHLogTools.LOG_ENABLE = true;      // 设置是否开启极光推送自定义日志打印
-                            JPushInterface.setDebugMode(true);    // 设置开启日志,发布时请关闭日志
-                            JPushInterface.init(this);            // 初始化 JPush  参数为应用的 ApplicationContext
-                4、
-
-
-    -->
-
     <!-- 极光推送需要的自定义声明权限 官方定义的权限，允许应用接收JPUSH内部代码发送的广播消息。 -->
     <permission
         android:name="com.zhq.multi_module.permission.JPUSH_MESSAGE"
-        android:protectionLevel="signature" /><!-- TODO 这里要替换下包名 -->
+        android:protectionLevel="signature" />
 
-    <!-- 使用自定义的权限 -->  <!-- TODO 这里要替换下包名 -->
+    <!-- 使用自定义的权限 -->
     <uses-permission android:name="com.zhq.multi_module.permission.JPUSH_MESSAGE" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -52,31 +36,11 @@
         android:label="@string/app_name"
         android:supportsRtl="true">
 
-        <!-- User defined.  For test only  用户 自定义 的广播接收器-->
-        <receiver
-            android:name=".MyReceiver"
-            android:enabled="true"
-            android:exported="false"><!-- TODO 极光推送自定义广播内容 -->
-            <intent-filter>
-                <!--Required  用户注册SDK获取Registration ID的intent-->
-                <action android:name="cn.jpush.android.intent.REGISTRATION" />
-                <!--Required  用户接收SDK自定义消息的intent-->
-                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
-                <!--Required  用户接收SDK通知栏信息的intent-->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
-                <!--Required  用户点击通知栏时，自定义使用的Intent跳转(如果开发者未配置此 receiver action，那么，SDK 会默认打开应用程序的主 Activity，相当于用户点击桌面图标的效果。)-->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
-                <!-- 接收网络变化 连接/断开 since 1.6.3 -->
-                <action android:name="cn.jpush.android.intent.CONNECTION" />
-                <category android:name="com.zhq.multi_module" /><!-- TODO 这里要替换下包名 -->
-            </intent-filter>
-        </receiver>
-
         <!-- User defined.  For test only  用户 自定义 接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调-->
-        <receiver android:name=".aliastag.MyJPushMessageReceiver"><!-- TODO 极光推送自定义广播内容 -->
+        <receiver android:name=".aliastag.MyJPushMessageReceiver">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
-                <category android:name="com.zhq.multi_module" /><!-- TODO 这里要替换下包名 -->
+                <category android:name="com.zhq.multi_module" />
             </intent-filter>
         </receiver>
 
@@ -96,7 +60,7 @@
                 <action android:name="cn.jpush.android.ui.PushActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="com.zhq.multi_module" /><!-- TODO 这里要替换下包名 -->
+                <category android:name="com.zhq.multi_module" />
             </intent-filter>
         </activity>
 
@@ -118,7 +82,7 @@
         <provider
             android:name="cn.jpush.android.service.DataProvider"
             android:authorities="com.zhq.multi_module.DataProvider"
-            android:exported="true" /><!-- TODO 这里要替换下包名 -->
+            android:exported="true" />
 
         <!-- 极光推送为1.8.0 版后的 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
         <!-- 若不启用该功能可删除该组件，将不拉起其他应用也不能被其他应用拉起 -->
@@ -128,7 +92,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.DaemonService" />
-                <category android:name="com.zhq.multi_module" /><!-- TODO 这里要替换下包名 -->
+                <category android:name="com.zhq.multi_module" />
             </intent-filter>
         </service>
 
@@ -136,7 +100,7 @@
         <provider
             android:name="cn.jpush.android.service.DownloadProvider"
             android:authorities="com.zhq.multi_module.DownloadProvider"
-            android:exported="true" /><!-- TODO 这里要替换下包名 -->
+            android:exported="true" />
 
         <!-- 极光推送必须要的 SDK核心功能-->
         <receiver
@@ -145,7 +109,7 @@
             android:exported="false">
             <intent-filter android:priority="1000">
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />   <!--Required  显示通知栏 -->
-                <category android:name="com.zhq.multi_module" /><!-- TODO 这里要替换下包名 -->
+                <category android:name="com.zhq.multi_module" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.USER_PRESENT" />
@@ -171,6 +135,6 @@
             android:value="developer-default" />
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="0c706e8f358564eb950922c0" /> <!--  TODO value值来自开发者平台取得的AppKey-->
+            android:value="0c706e8f358564eb950922c0" />
     </application>
 </manifest>
