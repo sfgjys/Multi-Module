@@ -16,17 +16,26 @@ public abstract class DistributeHandleResult implements SingleObserver<Object> {
         if (aliasTagsBean.isNeedAgainAction()) {
             suggestAgainAction(aliasTagsBean);
         } else {
-            actionSuccess(aliasTagsBean);
+            if (aliasTagsBean.isAliasAction()) {
+                aliasActionSuccess(aliasTagsBean);
+            } else {
+                tagActionSuccess(aliasTagsBean);
+            }
         }
     }
+
+    /**
+     * 方法描述: 让使用者来决定具体的成功操作标签后该如何
+     */
+    public abstract void tagActionSuccess(AliasTagsBean aliasTagsBean);
+
+    /**
+     * 方法描述: 让使用者来决定具体的成功操作别名后该如何
+     */
+    public abstract void aliasActionSuccess(AliasTagsBean aliasTagsBean);
 
     /**
      * 方法描述: 让使用者来决定具体的重试操作
      */
     public abstract void suggestAgainAction(AliasTagsBean aliasTagsBean);
-
-    /**
-     * 方法描述: 让使用者来决定具体的成功操作后该如何
-     */
-    public abstract void actionSuccess(AliasTagsBean aliasTagsBean);
 }
