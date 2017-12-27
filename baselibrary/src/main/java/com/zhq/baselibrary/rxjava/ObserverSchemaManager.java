@@ -64,7 +64,7 @@ public class ObserverSchemaManager {
     /**
      * 将SingleObserver进行存储，让Single可以调用subscribe方法进行订阅关系建立
      */
-    public void saveObserver(int tag, SingleObserver<Object> singleObserver) {
+    public void setObserveListenCallback(int tag, SingleObserver<Object> singleObserver) {
         if (mMultiObserver.get(tag) == null) {
             mMultiObserver.put(tag, singleObserver);
         }

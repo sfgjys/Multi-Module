@@ -1,9 +1,10 @@
 package com.zhq.jpush.aliastag;
 
 import android.content.Context;
-import android.os.Message;
 import android.util.SparseArray;
 
+import com.zhq.baselibrary.rxjava.ObserveSerialNumber;
+import com.zhq.baselibrary.rxjava.ObserverSchemaManager;
 import com.zhq.jpush.bean.AliasTagsBean;
 import com.zhq.jpush.tool.JPUSHLogTools;
 import com.zhq.jpush.tool.JPUSHTools;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.JPushMessage;
+import io.reactivex.SingleObserver;
 
 /**
  * 类的描述: 别名和标签的操作帮助类
@@ -25,7 +27,7 @@ public class AliasTagOperatorHelper {
     // 获取上下文
     private Context context;
 
-    public void init(Context context) {
+    private void init(Context context) {
         if (context != null) {
             this.context = context.getApplicationContext();
         }
@@ -50,21 +52,8 @@ public class AliasTagOperatorHelper {
     }
     // 单例模式
 
-    // 操作别名标签动作的缓存
+    // 操作别名标签动作的缓存集合
     private SparseArray<AliasTagsBean> mOperatorAliasTagActionCacheArray = new SparseArray<>();
-
-    private AliasTagsBean getActionCache(int sequence) {
-        return mOperatorAliasTagActionCacheArray.get(sequence);
-    }
-
-    private void removeActionCache(int sequence) {
-        mOperatorAliasTagActionCacheArray.remove(sequence);
-    }
-
-    private void putActionCache(int sequence, AliasTagsBean tagAliasBean) {
-        mOperatorAliasTagActionCacheArray.put(sequence, tagAliasBean);
-    }
-    // 操作别名标签动作的缓存
 
 
     /**
@@ -73,14 +62,17 @@ public class AliasTagOperatorHelper {
      * @param sequence 使用本类的全局静态变量sequence++
      * @param context  最好使用getApplicationContext
      */
-    public void handleAction(Context context, int sequence, AliasTagsBean aliasTagsBean) {
+    public void handleAction(Context context, int sequence, AliasTagsBean aliasTagsBean, SingleObserver<Object> singleObserver) {
         init(context);
         if (aliasTagsBean == null) {
             JPUSHLogTools.w(TAG, "操作别名或者标签时需要的参数Bean类对象为空");
             return;
         }
         // 存储缓存
-        putActionCache(sequence, aliasTagsBean);
+        mOperatorAliasTagActionCacheArray.put(sequence, aliasTagsBean);
+
+        // 设置操作结果的回调
+        ObserverSchemaManager.getInstance().setObserveListenCallback(ObserveSerialNumber.OBSERVE_ALIAS_TAG_OPERATOR_RESULT, singleObserver);
 
         if (aliasTagsBean.isAliasAction()) {// 是操作别名的动作
             switch (aliasTagsBean.getWhichAction()) {
@@ -134,7 +126,7 @@ public class AliasTagOperatorHelper {
     /**
      * 方法描述: tag增删查改的操作会在此方法中回调结果。
      */
-    public  void onTagOperatorResult(Context context, JPushMessage jPushMessage) {
+    void onTagOperatorResult(Context context, JPushMessage jPushMessage) {
         int sequence = jPushMessage.getSequence();
         int errorCode = jPushMessage.getErrorCode();// 0为成功，其他返回码请参考错误码定义.
         Set<String> tags = jPushMessage.getTags();// 开发者传或查询得到的tags。
@@ -149,12 +141,18 @@ public class AliasTagOperatorHelper {
             return;
         }
 
-        if (errorCode == 0) {
-            mOperatorAliasTagActionCacheArray.remove(sequence);
-            String logs = getActionString(aliasTagsBean.getWhichAction()) + "成功了";
+        aliasTagsBean.setActionResult(jPushMessage);
+
+        // 不管操作是否成功，都需要将缓存移除
+        mOperatorAliasTagActionCacheArray.remove(sequence);
+
+        if (errorCode == 0) {// 成功后从mOperatorAliasTagActionCacheArray集合中移除信息，然后将操作结果传递出去
+            String logs = aliasTagsBean.getActionName() + "成功了";
             JPUSHLogTools.i(TAG, logs);
+
+            transmitOperatorResult(ObserveSerialNumber.OBSERVE_ALIAS_TAG_OPERATOR_RESULT, aliasTagsBean);
         } else {
-            String logs = getActionString(aliasTagsBean.getWhichAction()) + "失败了";
+            String logs = aliasTagsBean.getActionName() + "失败了";
             if (errorCode == 6018) {
                 //tag数量超过限制,需要先清除一部分再add
                 logs += "，Tag数量超过限制,需要先清除一部分";
@@ -162,17 +160,14 @@ public class AliasTagOperatorHelper {
             logs += ", errorCode:" + jPushMessage.getErrorCode();
             JPUSHLogTools.e(TAG, logs);
 
-            // 操作失败，尝试重新操作
-            if (!RetryActionIfNeeded(errorCode, aliasTagsBean)) {
-                JPUSHTools.showToast(logs, context);
-            }
+            handleFailureResults(aliasTagsBean, logs);
         }
     }
 
     /**
      * 方法描述: 查询某个tag与当前用户的绑定状态的操作会在此方法中回调结果。
      */
-    public    void onCheckTagOperatorResult(Context context, JPushMessage jPushMessage) {
+    void onCheckTagOperatorResult(Context context, JPushMessage jPushMessage) {
         int sequence = jPushMessage.getSequence();
         int errorCode = jPushMessage.getErrorCode();// 0为成功，其他返回码请参考错误码定义.
         boolean tagCheckStateResult = jPushMessage.getTagCheckStateResult();// 开发者想要查询的tag与当前用户绑定的状态。
@@ -188,25 +183,28 @@ public class AliasTagOperatorHelper {
             return;
         }
 
-        if (errorCode == 0) {
-            mOperatorAliasTagActionCacheArray.remove(sequence);
-            String logs = getActionString(aliasTagsBean.getWhichAction()) + "-成功了，" + checkTag + "标签与当前用户的绑定状态是:" + tagCheckStateResult;
+        aliasTagsBean.setActionResult(jPushMessage);
+
+        // 不管操作是否成功，都需要将缓存移除
+        mOperatorAliasTagActionCacheArray.remove(sequence);
+
+        if (errorCode == 0) {// 成功后从mOperatorAliasTagActionCacheArray集合中移除信息，然后将操作结果传递出去
+            String logs = aliasTagsBean.getActionName() + "-成功了，" + checkTag + "标签与当前用户的绑定状态是:" + tagCheckStateResult;
             JPUSHLogTools.i(TAG, logs);
+
+            transmitOperatorResult(ObserveSerialNumber.OBSERVE_ALIAS_TAG_OPERATOR_RESULT, aliasTagsBean);
         } else {
-            String logs = getActionString(aliasTagsBean.getWhichAction()) + "-失败了, errorCode:" + jPushMessage.getErrorCode();
+            String logs = aliasTagsBean.getActionName() + "-失败了, errorCode:" + jPushMessage.getErrorCode();
             JPUSHLogTools.e(TAG, logs);
 
-            // 操作失败，尝试重新操作
-            if (!RetryActionIfNeeded(errorCode, aliasTagsBean)) {
-                JPUSHTools.showToast(logs, context);
-            }
+            handleFailureResults(aliasTagsBean, logs);
         }
     }
 
     /**
      * 方法描述: alias相关的操作会在此方法中回调结果。
      */
-  public   void onAliasOperatorResult(Context context, JPushMessage jPushMessage) {
+    void onAliasOperatorResult(Context context, JPushMessage jPushMessage) {
         int sequence = jPushMessage.getSequence();
         int errorCode = jPushMessage.getErrorCode();// 0为成功，其他返回码请参考错误码定义.
         String alias = jPushMessage.getAlias();// 开发者传或查询得到的alias。
@@ -221,75 +219,58 @@ public class AliasTagOperatorHelper {
             return;
         }
 
-        if (errorCode == 0) {// 别名操作成功
-            mOperatorAliasTagActionCacheArray.remove(sequence);
-            String logs = getActionString(aliasTagsBean.getWhichAction()) + "-成功了";
+        aliasTagsBean.setActionResult(jPushMessage);
+
+        // 不管操作是否成功，都需要将缓存移除
+        mOperatorAliasTagActionCacheArray.remove(sequence);
+
+        if (errorCode == 0) {// 成功后从mOperatorAliasTagActionCacheArray集合中移除信息，然后将操作结果传递出去
+            String logs = aliasTagsBean.getActionName() + "-成功了";
             JPUSHLogTools.i(TAG, logs);
+
+            transmitOperatorResult(ObserveSerialNumber.OBSERVE_ALIAS_TAG_OPERATOR_RESULT, aliasTagsBean);
         } else {// 别名操作失败
-            String logs = getActionString(aliasTagsBean.getWhichAction()) + "-失败了, errorCode:" + jPushMessage.getErrorCode();
+            String logs = aliasTagsBean.getActionName() + "-失败了, errorCode:" + jPushMessage.getErrorCode();
             JPUSHLogTools.e(TAG, logs);
 
-            // 操作失败，尝试重新操作
-            if (!RetryActionIfNeeded(errorCode, aliasTagsBean)) {
-                JPUSHTools.showToast(logs, context);
-            }
+            handleFailureResults(aliasTagsBean, logs);
         }
     }
 
-    private String getActionString(int actionType) {
-        switch (actionType) {
-            // 别名操作
-            case AliasTagsBean.ALIAS_ACTION_DELETE:
-
-                return "删除绑定中的别名";
-            case AliasTagsBean.ALIAS_ACTION_GET:
-
-                return "获取绑定中的别名";
-            case AliasTagsBean.ALIAS_ACTION_SET:
-
-                return "设置要进行绑定的别名";
-
-            // 标签操作
-            case AliasTagsBean.TAG_ACTION_ADD:
-
-                return "在原有的基础上添加多个标签";
-            case AliasTagsBean.TAG_ACTION_CHECK:
-
-                return "查询指定一个标签与用户绑定状态";
-            case AliasTagsBean.TAG_ACTION_CLEAN_ALL:
-
-                return "清除所有标签";
-            case AliasTagsBean.TAG_ACTION_DELETE:
-
-                return "删除多个标签";
-            case AliasTagsBean.TAG_ACTION_GET_ALL:
-
-                return "查询所有标签";
-            case AliasTagsBean.TAG_ACTION_SET:
-
-                return "设置并覆盖掉原有的标签";
+    /**
+     * 方法描述: 操作失败，尝试重新操作
+     */
+    private void handleFailureResults(AliasTagsBean aliasTagsBean, String logs) {
+        if (RetryActionIfNeeded(aliasTagsBean.getActionResult().getErrorCode())) {
+            aliasTagsBean.setNeedAgainAction(true);
+            transmitOperatorResult(ObserveSerialNumber.OBSERVE_ALIAS_TAG_OPERATOR_RESULT, aliasTagsBean);
+        } else {
+            JPUSHTools.showToast(logs, context);
         }
-        return "没有定义的操作";
     }
 
-    private boolean RetryActionIfNeeded(int errorCode, AliasTagsBean aliasTagsBean) {
+    /**
+     * 方法描述: 本方法中先判断手机网络是否异常，在判断操作失败的错误码是否是6002或者6014
+     * 如果网络异常，或者错误码不是6002或者6014，那么就返回false，弹出错误提示土司。否者就尝试重新开始操作，并返回true
+     */
+    private boolean RetryActionIfNeeded(int errorCode) {
         if (!JPUSHTools.isConnected(context)) {
             JPUSHLogTools.w(TAG, "手机网络异常");
             return false;
         }
-        //返回的错误码为6002 超时,6014 服务器繁忙,都建议延迟重试
+        // 返回的错误码为6002 超时,6014 服务器繁忙,都建议延迟重试
         if (errorCode == 6002 || errorCode == 6014) {
             JPUSHLogTools.d(TAG, "可以尝试进行操作重试");
-            if (aliasTagsBean != null) {
-                Message message = new Message();
-//                message.what = DELAY_SEND_ACTION;
-//                message.obj = aliasTagsBean;
-//                delaySendHandler.sendMessageDelayed(message, 1000 * 60);
-//                String logs = getRetryStr(aliasTagsBean.isAliasAction, aliasTagsBean.action, errorCode);
-//                ExampleUtil.showToast(logs, context);
-                return true;
-            }
+            return true;
         }
         return false;
+    }
+
+    /**
+     * 方法描述: 通过观察者模式将操作的结果传递出去
+     */
+    private void transmitOperatorResult(int tag, AliasTagsBean aliasTagsBean) {
+        ObserverSchemaManager.getInstance().createObservable(tag, aliasTagsBean);
+        ObserverSchemaManager.getInstance().subscribe(tag);
     }
 }
