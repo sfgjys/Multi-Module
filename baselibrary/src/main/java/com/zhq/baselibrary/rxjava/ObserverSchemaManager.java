@@ -1,5 +1,7 @@
 package com.zhq.baselibrary.rxjava;
 
+import android.util.SparseArray;
+
 import java.util.HashMap;
 
 import io.reactivex.Single;
@@ -37,14 +39,14 @@ public class ObserverSchemaManager {
     }
     // 获取本类的单例对象
 
-    private HashMap<String, Single<Object>> mMultiObservable = new HashMap<>();
-    private HashMap<String, MySingleOnSubscribe> mMultiOnSubscribe = new HashMap<>();
-    private HashMap<String, SingleObserver<Object>> mMultiObserver = new HashMap<>();
+    private SparseArray<Single<Object>> mMultiObservable = new SparseArray<>();
+    private SparseArray<MySingleOnSubscribe> mMultiOnSubscribe = new SparseArray<>();
+    private SparseArray<SingleObserver<Object>> mMultiObserver = new SparseArray<>();
 
     /**
      * 创建Single和其内部对象SingleOnSubscribe，或者更新SingleOnSubscribe发送消息时使用的数据对象
      */
-    public void createObservable(String tag, Object data) {
+    public void createObservable(int tag, Object data) {
         if (mMultiOnSubscribe.get(tag) == null) {
             MySingleOnSubscribe mySingleOnSubscribe = new MySingleOnSubscribe();
             mySingleOnSubscribe.updateData(data);
@@ -62,7 +64,7 @@ public class ObserverSchemaManager {
     /**
      * 将SingleObserver进行存储，让Single可以调用subscribe方法进行订阅关系建立
      */
-    public void saveObserver(String tag, SingleObserver<Object> singleObserver) {
+    public void saveObserver(int tag, SingleObserver<Object> singleObserver) {
         if (mMultiObserver.get(tag) == null) {
             mMultiObserver.put(tag, singleObserver);
         }
@@ -71,7 +73,7 @@ public class ObserverSchemaManager {
     /**
      * 通用的建立订阅关系
      */
-    public void subscribe(String tag) {
+    public void subscribe(int tag) {
         if (mMultiObserver.get(tag) == null) {
             mMultiObservable.get(tag).subscribe();
         } else {
@@ -82,7 +84,7 @@ public class ObserverSchemaManager {
     /**
      * 移除指定的被观察者
      */
-    public void removeAppointObservable(String tag) {
+    public void removeAppointObservable(int tag) {
         mMultiObservable.remove(tag);
         mMultiOnSubscribe.remove(tag);
     }
@@ -90,7 +92,7 @@ public class ObserverSchemaManager {
     /**
      * 移除指定的观察者
      */
-    public void removeAppointObserver(String tag) {
+    public void removeAppointObserver(int tag) {
         mMultiObserver.remove(tag);
     }
 }
