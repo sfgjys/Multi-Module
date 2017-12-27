@@ -1,4 +1,4 @@
-package com.zhq.jpush;
+package com.zhq.jpush.aliastag;
 
 import android.content.Context;
 

@@ -1,4 +1,4 @@
-package com.zhq.jpush;
+package com.zhq.jpush.aliastag;
 
 import android.content.Context;
 import android.os.Message;
@@ -53,15 +53,15 @@ public class AliasTagOperatorHelper {
     // 操作别名标签动作的缓存
     private SparseArray<AliasTagsBean> mOperatorAliasTagActionCacheArray = new SparseArray<>();
 
-    public AliasTagsBean getActionCache(int sequence) {
+    private AliasTagsBean getActionCache(int sequence) {
         return mOperatorAliasTagActionCacheArray.get(sequence);
     }
 
-    public void removeActionCache(int sequence) {
+    private void removeActionCache(int sequence) {
         mOperatorAliasTagActionCacheArray.remove(sequence);
     }
 
-    public void putActionCache(int sequence, AliasTagsBean tagAliasBean) {
+    private void putActionCache(int sequence, AliasTagsBean tagAliasBean) {
         mOperatorAliasTagActionCacheArray.put(sequence, tagAliasBean);
     }
     // 操作别名标签动作的缓存
@@ -134,11 +134,9 @@ public class AliasTagOperatorHelper {
     /**
      * 方法描述: tag增删查改的操作会在此方法中回调结果。
      */
-    public void onTagOperatorResult(Context context, JPushMessage jPushMessage) {
+    public  void onTagOperatorResult(Context context, JPushMessage jPushMessage) {
         int sequence = jPushMessage.getSequence();
         int errorCode = jPushMessage.getErrorCode();// 0为成功，其他返回码请参考错误码定义.
-        boolean tagCheckStateResult = jPushMessage.getTagCheckStateResult();// 开发者想要查询的tag与当前用户绑定的状态。
-        String checkTag = jPushMessage.getCheckTag();// 开发者想要查询绑定状态的tag。
         Set<String> tags = jPushMessage.getTags();// 开发者传或查询得到的tags。
 
         JPUSHLogTools.i(TAG, "标签的增删查改的操作结果, sequence:" + sequence + ",tags:" + tags + ",tags集合大小:" + tags.size());
@@ -174,10 +172,9 @@ public class AliasTagOperatorHelper {
     /**
      * 方法描述: 查询某个tag与当前用户的绑定状态的操作会在此方法中回调结果。
      */
-    public void onCheckTagOperatorResult(Context context, JPushMessage jPushMessage) {
+    public    void onCheckTagOperatorResult(Context context, JPushMessage jPushMessage) {
         int sequence = jPushMessage.getSequence();
         int errorCode = jPushMessage.getErrorCode();// 0为成功，其他返回码请参考错误码定义.
-        Set<String> tags = jPushMessage.getTags();// 开发者传或查询得到的tags。
         boolean tagCheckStateResult = jPushMessage.getTagCheckStateResult();// 开发者想要查询的tag与当前用户绑定的状态。
         String checkTag = jPushMessage.getCheckTag();// 开发者想要查询绑定状态的tag。
 
@@ -209,7 +206,7 @@ public class AliasTagOperatorHelper {
     /**
      * 方法描述: alias相关的操作会在此方法中回调结果。
      */
-    public void onAliasOperatorResult(Context context, JPushMessage jPushMessage) {
+  public   void onAliasOperatorResult(Context context, JPushMessage jPushMessage) {
         int sequence = jPushMessage.getSequence();
         int errorCode = jPushMessage.getErrorCode();// 0为成功，其他返回码请参考错误码定义.
         String alias = jPushMessage.getAlias();// 开发者传或查询得到的alias。
