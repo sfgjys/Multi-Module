@@ -83,20 +83,6 @@ public class JPUSHTools {
     }
 
     /**
-     * 方法描述: 在主线程中弹吐司
-     */
-    public static void showToast(final String toast, final Context context) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                Toast.makeText(context, toast, Toast.LENGTH_SHORT).show();
-                Looper.loop();
-            }
-        }).start();
-    }
-
-    /**
      * 方法描述: 判断是否链接了网络
      */
     public static boolean isConnected(Context context) {

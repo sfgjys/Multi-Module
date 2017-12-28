@@ -16,13 +16,13 @@
  1. 在jpush Module的清单文件中，将写有“您的应用的包名”替换为 主Module 的包名
  2. 在jpush Module的清单文件中，将写有“您设置的极光推送应用的AppKey”替换为您设置的极光推送应用的AppKey
  3. 在  主Module  中的自定义的Application的onCreate方法中写入如下代码，初始化并开启极光推送:
+ ```
+  // 极光推送初始化
+ JPUSHLogTools.LOG_ENABLE = true;      // 设置是否开启极光推送自定义日志打印
+ JPushInterface.setDebugMode(true);    // 设置开启日志,发布时请关闭日志
+ JPushInterface.init(this);            // 初始化 JPush  参数为应用的 ApplicationContext
+ ```
  4. 要使用标签或者别名设置功能调用AliasTagOperatorHelper类的handleAction方法
-```
- // 极光推送初始化
-JPUSHLogTools.LOG_ENABLE = true;      // 设置是否开启极光推送自定义日志打印
-JPushInterface.setDebugMode(true);    // 设置开启日志,发布时请关闭日志
-JPushInterface.init(this);            // 初始化 JPush  参数为应用的 ApplicationContext
-```
  5. 要接收  用户注册SDK获取Registration，用户接收SDK自定义消息，用户接收SDK通知栏信息，用户点击通知栏时，网络变化 连接/断开。那就需要按照MyReceiver类的格式在  主Module  中创建广播类，并且该广播类在清单文件中进行注册时，需要按照如下格式来
 
 ```

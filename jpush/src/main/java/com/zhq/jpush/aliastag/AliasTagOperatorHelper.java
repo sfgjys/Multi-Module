@@ -5,6 +5,7 @@ import android.util.SparseArray;
 
 import com.zhq.baselibrary.rxjava.ObserveSerialNumber;
 import com.zhq.baselibrary.rxjava.ObserverSchemaManager;
+import com.zhq.baselibrary.tool.CommonTools;
 import com.zhq.jpush.bean.AliasTagsBean;
 import com.zhq.jpush.tool.JPUSHLogTools;
 import com.zhq.jpush.tool.JPUSHTools;
@@ -137,7 +138,7 @@ public class AliasTagOperatorHelper {
         //根据sequence从之前操作缓存中获取缓存记录
         AliasTagsBean aliasTagsBean = mOperatorAliasTagActionCacheArray.get(sequence);
         if (aliasTagsBean == null) {
-            JPUSHTools.showToast("获取缓存记录失败", context);
+            CommonTools.showToast("获取缓存记录失败", context);
             return;
         }
 
@@ -179,7 +180,7 @@ public class AliasTagOperatorHelper {
         //根据sequence从之前操作缓存中获取缓存记录
         AliasTagsBean aliasTagsBean = mOperatorAliasTagActionCacheArray.get(sequence);
         if (aliasTagsBean == null) {
-            JPUSHTools.showToast("获取缓存记录失败", context);
+            CommonTools.showToast("获取缓存记录失败", context);
             return;
         }
 
@@ -215,7 +216,7 @@ public class AliasTagOperatorHelper {
         //根据sequence从之前操作缓存中获取缓存记录
         AliasTagsBean aliasTagsBean = mOperatorAliasTagActionCacheArray.get(sequence);
         if (aliasTagsBean == null) {
-            JPUSHTools.showToast("获取缓存记录失败", context);
+            CommonTools.showToast("获取缓存记录失败", context);
             return;
         }
 
@@ -245,7 +246,7 @@ public class AliasTagOperatorHelper {
             aliasTagsBean.setNeedAgainAction(true);
             transmitOperatorResult(ObserveSerialNumber.OBSERVE_ALIAS_TAG_OPERATOR_RESULT, aliasTagsBean);
         } else {
-            JPUSHTools.showToast(logs, context);
+            CommonTools.showToast(logs, context);
         }
     }
 
