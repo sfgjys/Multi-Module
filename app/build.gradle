@@ -22,5 +22,4 @@ android {
 
 dependencies {
     compile project(':ali_pay')// 支付宝模块
-    compile project(':jpush')
 }
