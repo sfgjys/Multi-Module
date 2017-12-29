@@ -2,6 +2,10 @@ package com.zhq.baselibrary.permission;
 
 import android.Manifest;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+
 /**
  * 类的描述: 权限工具
  */
@@ -44,5 +48,17 @@ public class PermissionTool {
         } else {
             return "该权限没有对应的危险权限组";
         }
+    }
+
+    /**
+     * 方法描述: 参数是一组权限，其中有些权限属于同一个权限组，所以本方法就是用来筛选出不重复的所有参数所涉及到的权限组名称
+     */
+    public static Set<String> getUnauthorizedPermissionGroupNames(ArrayList<String> applyForFailedPermissions) {
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        for (String failedPermission : applyForFailedPermissions) {
+            String dangerPermissionGroupName = PermissionTool.getDangerPermissionGroupName(failedPermission);
+            hashMap.put(dangerPermissionGroupName, 0);
+        }
+        return hashMap.keySet();
     }
 }

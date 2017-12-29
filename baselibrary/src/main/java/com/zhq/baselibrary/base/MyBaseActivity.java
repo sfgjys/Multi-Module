@@ -31,7 +31,7 @@ public class MyBaseActivity extends FragmentActivity {
     /**
      * 变量描述:
      */
-    private static final int SKIP_APP_INFO_SETTING_CODE = 8;
+    public static final int SKIP_APP_INFO_SETTING_CODE = 8;
     /**
      * 变量描述: 权限请求结果的回调对象
      */
@@ -122,14 +122,12 @@ public class MyBaseActivity extends FragmentActivity {
                     mPermissionRequestResultCallback.onFailure(bundle, new Throwable("权限被拒绝了"));
                 }
                 break;
-            case SKIP_APP_INFO_SETTING_CODE:
-                System.out.println();
-                break;
         }
     }
 
     /**
-     * 方法描述: 跳转至应用系统设置信息界面
+     * 方法描述: 跳转至应用系统设置信息界面，
+     * 注意：因为跳转页面是用的startActivityForResult方法，所以当从应用系统设置信息界面返回本应用时会在onActivityResult方法中回调
      */
     public void skipAppInfoSettingActivity() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
