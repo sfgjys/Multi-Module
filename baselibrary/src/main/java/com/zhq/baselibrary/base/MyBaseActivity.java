@@ -38,10 +38,9 @@ public class MyBaseActivity extends FragmentActivity {
      * 方法描述: 请求权限
      *
      * @param context        注意必须得是Activity
-     * @param permissionName 请求权限的列表的名称
      * @param permissionList 请求权限的列表
      */
-    public void permissionToRequest(Context context, String[] permissionList, String[] permissionName, AsyncCallback asyncCallback) {
+    public void permissionToRequest(Context context, String[] permissionList, AsyncCallback asyncCallback) {
         if (asyncCallback == null) {
             CommonTools.showToast("权限请求结果的回调对象为null", context);
             return;
@@ -56,7 +55,7 @@ public class MyBaseActivity extends FragmentActivity {
             mPermissionRequestResultCallback.onFailure(null, new Throwable("权限请求需要的Activity不为Activity类型"));
             return;
         }
-        if (permissionList == null || permissionName == null || !(permissionList.length > 0) || !(permissionName.length > 0)) {
+        if (permissionList == null || !(permissionList.length > 0)) {
             mPermissionRequestResultCallback.onFailure(null, new Throwable("权限数据有问题"));
             return;
         }
@@ -72,7 +71,6 @@ public class MyBaseActivity extends FragmentActivity {
                 for (String noPermissionTip : mNoPermissionList) {
                     stringBuilder.append(noPermissionTip).append(";");
                 }
-                CommonTools.showToast("6.0以下: " + stringBuilder.toString() + " 没有获取到权限", activity);
                 mPermissionRequestResultCallback.onFailure(null, new Throwable("本系统在6.0以下，但是没有在清单文件中申请以下权限: " + stringBuilder.toString()));
             }
         }
@@ -107,15 +105,21 @@ public class MyBaseActivity extends FragmentActivity {
         switch (requestCode) {
             case PERMISSION_REQUEST_CODE:
                 failedPermissions.clear();
+
+                // permissions是进行申请的权限数组，而grantResults是对应的申请结果的数组
                 for (int i = 0; i < permissions.length; i++) {
                     if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
                         failedPermissions.add(permissions[i]);
                     }
                 }
-                if (failedPermissions.size() == 0) {
+                if (failedPermissions.size() == 0) {// 失败权限集合没有数据，说明成功了
                     mPermissionRequestResultCallback.onSuccess(null);
                 } else {
-                    mPermissionRequestResultCallback.onFailure(null, new Throwable("有权限被拒绝了"));
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (String noPermissionTip : failedPermissions) {
+                        stringBuilder.append(noPermissionTip).append(";");
+                    }
+                    mPermissionRequestResultCallback.onFailure(null, new Throwable(stringBuilder + " 权限被拒绝了"));
                 }
                 break;
             case SKIP_APP_INFO_SETTING_CODE:
