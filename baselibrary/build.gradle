@@ -27,7 +27,9 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.+'// V7包
     compile 'com.android.support.constraint:constraint-layout:1.0.2'// 约束布局
     testCompile 'junit:junit:4.12'// java单元测试
-    
+
+    // Gson
+    compile 'com.google.code.gson:gson:2.8.2'
     // RxJava
     compile 'io.reactivex.rxjava2:rxjava:2.1.7'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
