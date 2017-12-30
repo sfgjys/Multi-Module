@@ -1,6 +1,8 @@
 package com.zhq.baselibrary.tool;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Looper;
 import android.widget.Toast;
 
@@ -23,4 +25,38 @@ public class CommonTools {
         }).start();
     }
 
+    /**
+     * 获取当前应用版本名
+     */
+    public static String getVersionName(Context context) {
+        return getPackageInfo(context).versionName;
+    }
+
+    /**
+     * 获取当前应用版本号
+     */
+    public static int getVersionCode(Context context) {
+        return getPackageInfo(context).versionCode;
+    }
+
+    private static PackageInfo getPackageInfo(Context context) {
+        PackageInfo packageInfo = null;
+        if (context != null) {
+            try {
+                PackageManager packageManager = context.getPackageManager();
+                packageInfo = packageManager.getPackageInfo(context.getPackageName(), PackageManager.GET_CONFIGURATIONS);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return packageInfo;
+    }
+
+    /**
+     * 获取当前系统SDK版本号
+     */
+    public static int getSystemVersion() {
+        /*获取当前系统的android版本号*/
+        return android.os.Build.VERSION.SDK_INT;
+    }
 }
