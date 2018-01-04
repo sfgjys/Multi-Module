@@ -34,6 +34,7 @@ public class AliPayBeanBuild {
                 mSaveAliPayAllKeys.put(aliPayKey, 9);
             }
         }
-        return mSaveAliPayAllKeys.get(needVerifyParameter) != 9;
+        Integer integer = mSaveAliPayAllKeys.get(needVerifyParameter);
+        return integer == null || integer != 9;
     }
 }

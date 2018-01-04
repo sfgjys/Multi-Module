@@ -17,9 +17,10 @@ public class OrderFormInfoTool {
     /**
      * 方法描述: 将订单公共信息参数转换为Map集合存储
      *
+     * @param biz_content       参考OrderFormBusinessInfoBean类
      * @param currentTimeMillis 发送支付请求的时间，格式"yyyy-MM-dd HH:mm:ss"
      */
-    public static Map<String, String> getOrderFormPublicInfoMap(String currentTimeMillis) {
+    public static Map<String, String> getOrderFormPublicInfoMap(String currentTimeMillis, String biz_content) {
         Map<String, String> orderFormInfo = new HashMap<>();
         // 接口名称
         orderFormInfo.put("method", "alipay.trade.app.pay");// 服务端
@@ -40,10 +41,7 @@ public class OrderFormInfoTool {
         orderFormInfo.put("timestamp", currentTimeMillis);// 客户端
 
         // 业务请求参数的集合，最大长度不限，除公共参数外所有请求参数都必须放在这个参数中传递，具体参照各产品快速接入文档
-        orderFormInfo.put("biz_content", "");// TODO????????????
-
-
-        // TODO orderFormInfo.put("sign", ""); 签名的值不在这里赋值
+        orderFormInfo.put("biz_content", biz_content);
         return orderFormInfo;
     }
 
