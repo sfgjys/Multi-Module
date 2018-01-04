@@ -7,7 +7,7 @@ import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.zhq.baselibrary.base.MyBaseActivity;
 
 /**
- * 类的描述: 接收微信支付结果  TODO 需不需要到清单文件中进行注册
+ * 类的描述: 接收微信支付结果  TODO 需不需要到清单文件中进行注册  还有是否需要用到某些权限
  */
 public class WXPayEntryActivity extends MyBaseActivity implements IWXAPIEventHandler {
 
