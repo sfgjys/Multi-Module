@@ -1,1 +1,1 @@
-include ':app', ':baselibrary', ':ali_pay', ':weixin_pay'
+include ':app', ':baselibrary', ':weixin_pay'
