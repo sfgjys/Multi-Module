@@ -13,8 +13,8 @@
 ----
 
 
- 1. 在jpush Module的清单文件中，将写有“您的应用的包名”替换为 主Module 的包名
- 2. 在jpush Module的清单文件中，将写有“您设置的极光推送应用的AppKey”替换为您设置的极光推送应用的AppKey
+ 1. 在jpush Module的清单文件中，将写有“your.app.packet.name”替换为 主Module 的包名
+ 2. 在jpush Module的清单文件中，将写有“your.set.jpush.app.key”替换为您设置的极光推送应用的AppKey
  3. 在  主Module  中的自定义的Application的onCreate方法中写入如下代码，初始化并开启极光推送:
  ```
   // 极光推送初始化
