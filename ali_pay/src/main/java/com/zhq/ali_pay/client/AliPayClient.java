@@ -1,4 +1,4 @@
-package com.zhq.ali_pay;
+package com.zhq.ali_pay.client;
 
 import android.app.Activity;
 
