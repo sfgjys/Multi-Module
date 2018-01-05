@@ -12,6 +12,13 @@ import android.widget.Toast;
 public class CommonTools {
 
     /**
+     * 方法描述: 判断当前线程是否是主线程
+     */
+    public static boolean isMainThread() {
+        return Looper.getMainLooper().getThread() == Thread.currentThread();
+    }
+
+    /**
      * 方法描述: 在主线程中弹吐司
      */
     public static void showToast(final String toast, final Context context) {

@@ -5,6 +5,7 @@ import com.zhq.ali_pay.server.sign.SignUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,22 +36,27 @@ public class OrderFormInfoTool {
         // 支付宝分配给开发者的应用ID
         orderFormInfo.put("app_id", AliPayFieldsConfig.APP_ID);// 服务端
         // 支付宝服务器主动通知商户服务器里指定的页面http/https路径。建议商户使用https
-        orderFormInfo.put("notify_url", AliPayFieldsConfig.PAY_RESULT_NOTIFY_CALLBACK_URL);// 服务端
+//        orderFormInfo.put("notify_url", AliPayFieldsConfig.PAY_RESULT_NOTIFY_CALLBACK_URL);// 服务端
 
         // 发送请求的时间，格式"yyyy-MM-dd HH:mm:ss"
         orderFormInfo.put("timestamp", currentTimeMillis);// 客户端
 
         // 业务请求参数的集合，最大长度不限，除公共参数外所有请求参数都必须放在这个参数中传递，具体参照各产品快速接入文档
-        orderFormInfo.put("biz_content", biz_content);
+        orderFormInfo.put("biz_content", biz_content);// 其中有些数据需要从客户端获取
         return orderFormInfo;
     }
 
     /**
      * 方法描述: 将拼接过的所有键值对通过 "&" 来拼接，进而获取除了“sign”参数的所有支付请求参数拼接完成的字符串
+     *
+     * @param isEncode 本法会被调用两次，一次是除了所有参数进行一次拼接这些参数是直接上传的所以需要进行编码，
+     *                 还有一次是将所有拼接的参数先进行sign才上传，所以在sign前不要进行编码
      */
-    public static String jointAllPayParameterExceptSign(Map<String, String> map) {
+    private static String jointAllPayParameterExceptSign(Map<String, String> map, boolean isEncode) {
         // 获取所有所有键值对的Key
         List<String> keys = new ArrayList<>(map.keySet());
+        // key排序
+        Collections.sort(keys);
 
         StringBuilder stringBuilder = new StringBuilder();
         // 这里获取了除了最后一对的所有键值对
@@ -60,7 +66,7 @@ public class OrderFormInfoTool {
             // 获取Key对应的Value
             String value = map.get(key);
             // 将Key和Value先进行拼接，在把拼接结果作为整体在拼接
-            stringBuilder.append(jointKeyValue(key, value, true));
+            stringBuilder.append(jointKeyValue(key, value, isEncode));
             stringBuilder.append("&");
         }
 
@@ -68,7 +74,7 @@ public class OrderFormInfoTool {
         String tailKey = keys.get(keys.size() - 1);
         String tailValue = map.get(tailKey);
         // 最后拼接
-        stringBuilder.append(jointKeyValue(tailKey, tailValue, true));
+        stringBuilder.append(jointKeyValue(tailKey, tailValue, isEncode));
         return stringBuilder.toString();
     }
 
@@ -97,8 +103,8 @@ public class OrderFormInfoTool {
      *
      * @return 获取的是“sign=加密结果”
      */
-    public static String encryptionAllPayParameterExceptSign(String allPayParameterExceptSign, String privateKey, boolean isRSA2) {
-        String signResult = SignUtils.sign(allPayParameterExceptSign, privateKey, isRSA2);
+    private static String encryptionAllPayParameterExceptSign(Map<String, String> map, String privateKey, boolean isRSA2) {
+        String signResult = SignUtils.sign(jointAllPayParameterExceptSign(map, false), privateKey, isRSA2);
         String encodedSignResult = "";
         try {
             // 给加密结果进行编码
@@ -113,8 +119,8 @@ public class OrderFormInfoTool {
      * 方法描述: 获取最终支付用的订单信息String
      */
     public static String getUltimatelyPayInfoString(Map<String, String> map) {
-        String unSignPayInfo = jointAllPayParameterExceptSign(map);
-        String signPayInfo = encryptionAllPayParameterExceptSign(unSignPayInfo, AliPayFieldsConfig.RSA2_PRIVATE, true);
+        String unSignPayInfo = jointAllPayParameterExceptSign(map, true);
+        String signPayInfo = encryptionAllPayParameterExceptSign(map, AliPayFieldsConfig.RSA2_PRIVATE, true);
         return unSignPayInfo + "&" + signPayInfo;
     }
 }
