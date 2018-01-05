@@ -3,11 +3,11 @@
 
     <!-- 极光推送需要的自定义声明权限 官方定义的权限，允许应用接收JPUSH内部代码发送的广播消息。 -->
     <permission
-        android:name="您的应用的包名.permission.JPUSH_MESSAGE"
+        android:name="your.app.packet.name.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
 
     <!-- 使用自定义的权限 -->
-    <uses-permission android:name="您的应用的包名.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="your.app.packet.name.permission.JPUSH_MESSAGE" />
 
     <!-- 特殊权限 -->
     <uses-permission android:name="android.permission.WRITE_SETTINGS" /><!--允许应用读写系统设置项。-->
@@ -53,7 +53,7 @@
         <receiver android:name=".aliastag.MyJPushMessageReceiver">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
-                <category android:name="您的应用的包名" />
+                <category android:name="your.app.packet.name" />
             </intent-filter>
         </receiver>
 
@@ -73,7 +73,7 @@
                 <action android:name="cn.jpush.android.ui.PushActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="您的应用的包名" />
+                <category android:name="your.app.packet.name" />
             </intent-filter>
         </activity>
 
@@ -94,7 +94,7 @@
         <!-- 极光推送为3.0.9 版后的必须要的 SDK 核心功能-->
         <provider
             android:name="cn.jpush.android.service.DataProvider"
-            android:authorities="您的应用的包名.DataProvider"
+            android:authorities="your.app.packet.name.DataProvider"
             android:exported="true" />
 
         <!-- 极光推送为1.8.0 版后的 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
@@ -105,14 +105,14 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.DaemonService" />
-                <category android:name="您的应用的包名" />
+                <category android:name="your.app.packet.name" />
             </intent-filter>
         </service>
 
         <!-- 极光推送为3.1.0 版后的必须要的SDK 核心功能-->
         <provider
             android:name="cn.jpush.android.service.DownloadProvider"
-            android:authorities="您的应用的包名.DownloadProvider"
+            android:authorities="your.app.packet.name.DownloadProvider"
             android:exported="true" />
 
         <!-- 极光推送必须要的 SDK核心功能-->
@@ -122,7 +122,7 @@
             android:exported="false">
             <intent-filter android:priority="1000">
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />   <!--Required  显示通知栏 -->
-                <category android:name="您的应用的包名" />
+                <category android:name="your.app.packet.name" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.USER_PRESENT" />
@@ -148,6 +148,6 @@
             android:value="developer-default" />
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="您设置的极光推送应用的AppKey" />
+            android:value="your.set.jpush.app.key" />
     </application>
 </manifest>
