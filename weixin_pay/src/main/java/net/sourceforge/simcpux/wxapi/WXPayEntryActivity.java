@@ -4,12 +4,12 @@ import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
-import com.zhq.baselibrary.base.MyBaseActivity;
+import com.zhq.baselibrary.base.PermissionActivity;
 
 /**
  * 类的描述: 接收微信支付结果  TODO 需不需要到清单文件中进行注册  还有是否需要用到某些权限
  */
-public class WXPayEntryActivity extends MyBaseActivity implements IWXAPIEventHandler {
+public class WXPayEntryActivity extends PermissionActivity implements IWXAPIEventHandler {
 
     /**
      * 变量的描述: 成功	展示成功页面

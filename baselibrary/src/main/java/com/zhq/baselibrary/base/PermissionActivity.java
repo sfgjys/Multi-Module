@@ -20,9 +20,9 @@ import com.zhq.baselibrary.tool.CommonTools;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyBaseActivity extends FragmentActivity {
+public class PermissionActivity extends FragmentActivity {
 
-    private static final String TAG = "MyBaseActivity";
+    private static final String TAG = "PermissionActivity";
 
     /**
      * 变量描述: 在使用requestPermissions方法申请权限的时候，作为参数三，最后用来在onRequestPermissionsResult回调方法中区分请求

@@ -2,10 +2,9 @@ package com.zhq.multi_module;
 
 import android.os.Bundle;
 
-import com.zhq.baselibrary.base.AsyncCallback;
-import com.zhq.baselibrary.base.MyBaseActivity;
+import com.zhq.baselibrary.base.PermissionActivity;
 
-public class MainActivity extends MyBaseActivity {
+public class MainActivity extends PermissionActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
