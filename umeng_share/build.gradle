@@ -20,4 +20,54 @@ android {
 
 dependencies {
     compile project(':baselibrary')
+
+    // 核心
+    compile files('libs/umeng-common-1.4.1.jar')// 友盟组件的基础通用jar
+    compile files('libs/umeng_social_api.jar')// 友盟分享API
+    compile files('libs/umeng_social_net.jar')// 友盟分享核心包
+    compile files('libs/umeng_social_tool.jar')// 友盟水印相关
+
+    // 下面两个jar属于可选项目，使用了默认分享面板UI时需要添加
+    compile files('libs/umeng_shareboard_widget.jar')// 友盟分享面板需要
+    compile files('libs/umeng_social_shareboard.jar') // 友盟分享面板需要
+
+    // 勾选了新浪精简版、豆瓣、人人时需要使用
+    compile files('libs/umeng_social_shareview.jar')// 友盟分享编辑页
+
+    // 下面的是各个平台社会化分享需要的JAR
+    // DropBox平台的因为json_simple所以暂时不用
+    compile files('libs/dropbox/json_simple-1.1.jar')
+    compile files('libs/dropbox/SocialSDK_dropbox.jar')
+    // linkedin平台的因为volley所以暂时不用
+    compile files('libs/linkedin/volley.jar')
+    compile files('libs/linkedin/SocialSDK_linkedin.jar')
+    compile files('libs/facebook/SocialSDK_facebook.jar')// facebook平台的暂时不用其自带的v4
+    compile files('libs/alipay/libapshare20161108.jar')
+    compile files('libs/alipay/SocialSDK_alipay.jar')
+    compile files('libs/dingding/libddshare.jar')
+    compile files('libs/dingding/SocialSDK_Ding.jar')
+    compile files('libs/douban/SocialSDK_douban.jar')
+    compile files('libs/email/SocialSDK_email.jar')
+    compile files('libs/evernote/SocialSDK_evernote.jar')
+    compile files('libs/kakao/SocialSDK_kakao.jar')
+    compile files('libs/gplus/SocialSDK_gplus.jar')
+    compile files('libs/instagram/SocialSDK_instagram.jar')
+    compile files('libs/line/SocialSDK_line.jar')
+    compile files('libs/flickr/SocialSDK_flickr.jar')
+    compile files('libs/foursquare/SocialSDK_foursquare.jar')
+    compile files('libs/pinterest/SocialSDK_pinterest.jar')
+    compile files('libs/pocket/SocialSDK_pocket.jar')
+    compile files('libs/qq/SocialSDK_QQ_Simplify.jar')
+    compile files('libs/renren/SocialSDK_renren.jar')
+    compile files('libs/sms/SocialSDK_sms.jar')
+    compile files('libs/tencentweibo/SocialSDK_tencentWB.jar')
+    compile files('libs/tumblr/SocialSDK_tumblr.jar')
+    compile files('libs/twitter/SocialSDK_twitter.jar')
+    compile files('libs/vkontakte/SocialSDK_vkontakte.jar')
+    compile files('libs/weixin/SocialSDK_WeChat_Simplify.jar')
+    compile files('libs/whatsapp/SocialSDK_whatsapp.jar')
+    compile files('libs/xinlang/SocialSDK_Sina_Simplify.jar')
+    compile files('libs/yixin/SocialSDK_yixin_1.jar')
+    compile files('libs/yixin/SocialSDK_yixin_2.jar')
+    compile files('libs/ynote/SocialSDK_ynote.jar')
 }
