@@ -7,6 +7,7 @@ import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.zhq.baselibrary.base.PermissionActivity;
+import com.zhq.baselibrary.dialog.LoadingDialog;
 import com.zhq.baselibrary.tool.CommonTools;
 
 import java.util.Map;
@@ -46,6 +47,7 @@ public class GetPlatformUserInfoActivity extends PermissionActivity implements U
      */
     @Override
     public void onStart(SHARE_MEDIA share_media) {
+        LoadingDialog.showLoadingDialog(getSupportFragmentManager());
     }
 
     /**
@@ -53,6 +55,7 @@ public class GetPlatformUserInfoActivity extends PermissionActivity implements U
      */
     @Override
     public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+        LoadingDialog.closeLoadingDialog();
     }
 
     /**
@@ -60,6 +63,7 @@ public class GetPlatformUserInfoActivity extends PermissionActivity implements U
      */
     @Override
     public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+        LoadingDialog.closeLoadingDialog();
         CommonTools.showToast(share_media.toSnsPlatform().mShowWord + "登录出现异常，请使用其它的登录/注册方式", getApplication());
     }
 
@@ -68,6 +72,7 @@ public class GetPlatformUserInfoActivity extends PermissionActivity implements U
      */
     @Override
     public void onCancel(SHARE_MEDIA share_media, int i) {
+        LoadingDialog.closeLoadingDialog();
         CommonTools.showToast("您取消了" + share_media.toSnsPlatform().mShowWord + "登录", getApplication());
     }
 }
