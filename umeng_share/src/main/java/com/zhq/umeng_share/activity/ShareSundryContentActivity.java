@@ -10,7 +10,6 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.shareboard.ShareBoardConfig;
 import com.umeng.socialize.utils.ShareBoardlistener;
 import com.zhq.baselibrary.base.PermissionActivity;
-import com.zhq.baselibrary.dialog.LoadingDialog;
 import com.zhq.baselibrary.tool.CommonTools;
 
 public class ShareSundryContentActivity extends PermissionActivity implements UMShareListener {
@@ -67,24 +66,20 @@ public class ShareSundryContentActivity extends PermissionActivity implements UM
 
     @Override
     public void onStart(SHARE_MEDIA share_media) {
-        LoadingDialog.showLoadingDialog(getSupportFragmentManager());
     }
 
     @Override
     public void onResult(SHARE_MEDIA share_media) {
-        LoadingDialog.closeLoadingDialog();
         CommonTools.showToast(share_media.toSnsPlatform().mShowWord + "平台分享成功", getApplication());
     }
 
     @Override
     public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-        LoadingDialog.closeLoadingDialog();
         CommonTools.showToast(share_media.toSnsPlatform().mShowWord + "平台分享出错", getApplication());
     }
 
     @Override
     public void onCancel(SHARE_MEDIA share_media) {
-        LoadingDialog.closeLoadingDialog();
         CommonTools.showToast(share_media.toSnsPlatform().mShowWord + "平台分享取消", getApplication());
     }
 }
