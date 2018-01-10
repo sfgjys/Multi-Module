@@ -29,4 +29,5 @@ dependencies {
 
     compile project(':ali_pay')
     compile project(':jpush')
+    compile project(':umeng_share')
 }

@@ -16,6 +16,12 @@ public abstract class BaseDialog extends DialogFragment {
 
     private Bundle mTransmitData;
 
+    /**
+     * 方法描述: 在创建对话框的时候可以在参数二Bundle中传入参数 KEY_DIALOG_STYLE 和 KEY_DIALOG_THEME 来设置对话框的样式和主题
+     * <p>
+     * 而且在参数二中传入的其他参数可以在onCreateDialogView方法中获取
+     * </p>
+     */
     public static BaseDialog newInstance(Class aClass, Bundle bundle) {
         try {
             Object object = aClass.newInstance();
