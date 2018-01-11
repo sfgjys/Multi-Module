@@ -13,13 +13,13 @@
 ----
 
 
- 1. 在umeng_share Module的清单文件中，将写有“your.package_name”替换为 主Module 的包名
- 2. 在umeng_share Module的java文件夹下，修改"your.package_name"为 主Module 的包名
+ 1. 在umeng_share Module的清单文件中，将写有 “your.package_name” 替换为 主Module 的包名
+ 2. 在umeng_share Module的java文件夹下，修改  "your.package_name"为 主Module 的包名，修改 "your_umeng_app_key" 为你在友盟申请的APP_KEY
  3. 在  主Module  中的自定义的Application的onCreate方法中写入如下代码，初始化并开启友盟社会哈分享:
 
 ```
-    // 参数二：友盟APP_KEY    参数三：是否开启日志打印    参数四：是否开启ShareSDK debug模式
-    ShareTools.initializeShareFeature(this,"59892f08310c9307b60023d0",true,true);
+    // 参数三：是否开启日志打印    参数四：是否开启ShareSDK debug模式
+    ShareTools.initializeShareFeature(this,true,true);
      /*  代码块的描述: 各个平台的配置 配置三方平台的appkey：，建议放在全局Application或者程序入口 */
     static {
         PlatformConfig.setAlipay("2015111700822536");

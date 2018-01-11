@@ -121,7 +121,7 @@
         <!-- 友盟appkey 与代码中设置的需要区分下优先级 -->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="58edcfeb310c93091c000be2" />
+            android:value="your_umeng_app_key" />
     </application>
 
 </manifest>

@@ -22,12 +22,13 @@ public class ShareTools {
     /**
      * 方法描述: 在应用的Application中调用本方法初始化分享功能
      */
-    public static void initializeShareFeature(Context context, String umengAppKey, boolean isOpenLog, boolean isOpenShareSDK) {
+    public static void initializeShareFeature(Context context, boolean isOpenLog, boolean isOpenShareSDK) {
         // 设置友盟组件的LOG日志的开关，默认为false
         UMConfigure.setLogEnabled(isOpenLog);
         // 初始化组件化基础库, 统计SDK/推送SDK/分享SDK都必须调用此初始化接口
-        // 参数二 友盟APP_KEY  参数二 渠道名称(分享可以不用)  参数三是类型  参数四是推送用的可以为""
-        UMConfigure.init(context, umengAppKey, "Umeng", UMConfigure.DEVICE_TYPE_PHONE, "");
+        // 参数二 友盟APP_KEY(这里为null，那必须在在清单文件中申明)  参数二 渠道名称(分享可以不用，如果要是用统计的话，这里为null，那必须在在清单文件中申明)
+        // 参数三是类型  参数四是推送用的可以为""
+        UMConfigure.init(context, null, null, UMConfigure.DEVICE_TYPE_PHONE, "");
         // 开启ShareSDK debug模式，方便定位错误，具体错误检查方式可以查看 http://dev.umeng.com/social/android/quick-integration 的报错必看，正式发布，请关闭该模式
         Config.DEBUG = isOpenShareSDK;
     }
