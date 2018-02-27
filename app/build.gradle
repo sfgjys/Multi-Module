@@ -26,6 +26,7 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'// java单元测试
     compile project(':weixin_pay')// 微信模块
+    compile project(':custom_view')
 
     compile project(':ali_pay')
     compile project(':jpush')
