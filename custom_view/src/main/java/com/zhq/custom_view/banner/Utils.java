@@ -22,5 +22,4 @@ public class Utils {
     public static float getFloat(float value,float minValue,float maxValue){
         return Math.min(maxValue, Math.max(minValue, value));
     }
-
 }

@@ -7,12 +7,6 @@ import android.support.v4.view.ViewPager;
  */
 
 public class CoverFlow {
-    //  public static final float DEFAULT_SCALE_VALUE  = 0.3f;
-
-    //  public static final float DEFAULT_PAGER_MARGIN = 0f;
-
-    //   public static final float DEFAULT_SPACE_SIZE   = 0f;
-
     private final ViewPager viewPager;
     private final float scaleValue;
     private final float pagerMargin;
