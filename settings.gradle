@@ -1,1 +1,1 @@
-include ':app', ':baselibrary', ':weixin_pay', ':ali_pay', ':jpush', ':umeng_share', ':custom_view'
+include ':app', ':baselibrary', ':weixin_pay', ':ali_pay', ':jpush', ':umeng_share', ':custom_view', ':adaptive'
